@@ -40,16 +40,19 @@ size_flags_horizontal = 3
 
 [node name="Generations" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
+minVal = 5
+step = 5
 
 [node name="Population" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "Population"
-minVal = 4
+minVal = 10
+step = 10
 
 [node name="x" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "X size"
-maxVal = 20
+maxVal = 24
 minVal = 5
 
 [node name="y" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]

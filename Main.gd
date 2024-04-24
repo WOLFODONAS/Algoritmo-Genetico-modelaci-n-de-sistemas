@@ -9,13 +9,14 @@ var sexMode:int
 @export var matrixLabel:Label
 @export var outputLable:RichTextLabel
 
+
 func _on_button_pressed() -> void:
 	matrix.clear()
 	matrix.resize(y)
 	
 	for i in y:
 		var newString = ""
-		var pchars = chars
+		var pchars = chars.substr(0,x)
 		for j in x:
 			var theChar = pchars[randi()%pchars.length()]
 			newString+=theChar
@@ -35,14 +36,15 @@ func _on_button_pressed() -> void:
 func _live(generation:int,population:Array[Individual]):
 	
 	population.sort_custom(sort_by_fitness)
-	var  minFitness:int= population[0].fitness
-	var  maxFitness:int = population[p-1].fitness
+	var  bestFitness:int= population[0].fitness
+	var  worstFitness:int = population[p-1].fitness
 	outputLable.append_text("Generation: [color=blue]%s[/color]\n"%generation)
-	outputLable.append_text("Best Fitness: [color=%s]%s[/color]\n"%["red"if minFitness>float(x*y)/2 
-	else "yellow" if minFitness != 0 else "green",minFitness])
-	outputLable.append_text("Worst Fitness: [color=%s]%s[/color]\n"%["red"if maxFitness>float(x*y)/2 
-	else "yellow" if maxFitness != 0 else "green",maxFitness])
-	if minFitness == 0 or generation>=g:
+	outputLable.append_text("Best Fitness: [color=%s]%s[/color]\n"%["red"if bestFitness>float(x*y)/2 
+	else "yellow" if bestFitness != 0 else "green",bestFitness])
+	outputLable.append_text("Worst Fitness: [color=%s]%s[/color]\n"%["red"if worstFitness>float(x*y)/2 
+	else "yellow" if worstFitness != 0 else "green",worstFitness])
+	if  generation>=g:
+		outputLable.append_text(str(population[0].chromosomes)+"\n")
 		for i in population[0].get_matrix(matrix):
 			outputLable.append_text(str(i)+"\n")
 		return
@@ -52,42 +54,51 @@ func _live(generation:int,population:Array[Individual]):
 		var fsum:int=0
 		for i in population:
 			fsum+=i.fitness
-			print(randf())
 		var Pi:Array[float]=[]
 		Pi.resize(p)
 		var pastVal:float=0.0
-		print("as")
+		var div:float = 1.0/float(population.size())
 		for i in p:
-			Pi[i] = float(population[i].fitness)/fsum +pastVal
-			print(Pi[i]-pastVal)
+			var fit = float(population[i].fitness)
+			if fit == 0:
+				Pi[i] = div + pastVal
+			else:
+				Pi[i] = float(population[i].fitness)/fsum +pastVal
 			pastVal=Pi[i]
-		
 		for i in p:
 			var fatherPi:float = randf()
 			var motherPi:float = randf()
-			
 			var fatherIndx:int=-1
 			var motherIndx:int=-1
 			for j in p:
-				if fatherIndx==-1 and fatherPi>Pi[j]:
+				if  fatherPi<Pi[j]:
 					fatherIndx=j
-				if motherIndx==-1 and motherPi>Pi[j] and j!=fatherIndx:
-					motherIndx=j
-				if motherIndx !=-1 and motherIndx !=-1:
 					break
-
-		#print(fsum)
-		
-	#_live(generation+1,population)
+			for j in p:
+				if  motherPi<Pi[j] and j !=fatherIndx:
+					motherIndx=j
+					break
+			newPopulation[i] = _get_better_kid(population[motherIndx],
+									population[fatherIndx])
+			
+	_live(generation+1,newPopulation)
 	
 func _get_better_kid(mother:Individual,father:Individual):
-	var matrixSize=x*y
+	var matrixSize=(x*y)
 	var crossLine:int = int(randf() * matrixSize)
-	var cA:Array[bool]=[]
-	var cB:Array[bool]=[]
-	for i in crossLine:
-		pass
-	
+	var cA:Array[bool]=(mother.chromosomes.slice(0,crossLine) 
+						+ father.chromosomes.slice(crossLine,matrixSize))
+	var cB:Array[bool]=(father.chromosomes.slice(0,crossLine) 
+						+ mother.chromosomes.slice(crossLine,matrixSize))
+	var randomGenA = int(randf() * matrixSize)
+	var randomGenB = int(randf() * matrixSize)
+	cA[randomGenA] = !cA[randomGenA] 
+	cB[randomGenB] = !cB[randomGenB] 
+	var son:Individual = Individual.new(x,y,false,cA)
+	var daughter:Individual = Individual.new(x,y,false,cB)
+	son.evaluete(matrix)
+	daughter.evaluete(matrix)
+	return son if son.fitness>daughter.fitness else daughter
 
 
 func sort_by_fitness(a:Individual,b:Individual):
@@ -114,7 +125,7 @@ func _on_option_button_item_selected(index: int) -> void:
 
 
 class Individual:
-	var chormosomes:Array[bool]
+	var chromosomes:Array[bool]
 	var fitness:int =0
 	var _x:int
 	var _y:int
@@ -122,41 +133,47 @@ class Individual:
 				isRandom:bool=true,newChromosomes:Array[bool]=[]) -> void:
 		_x = cx
 		_y = cy
-		chormosomes.resize(cy)
 		if isRandom or newChromosomes.size()!=cx*cy:
-			for i in cy:
-				var column:Array[bool]=[]
-				column.resize(cx)
-				chormosomes[i]=column
-				for j in cx:
-					column[j] = randi() % 2==0
+			for i in cy*cx:
+				chromosomes.append(randi() % 2==0)
 		else :
 			for i in cy:
-				chormosomes[i] = newChromosomes.slice(i,i+4)
+				chromosomes = newChromosomes
 	func get_matrix(matrix:Array[String])->Array[String]:
 		var trueMatrix:Array[String]=[]
-		for i in matrix.size():
-			var row = matrix[i]
-			for j in row.length():
-				if chormosomes[i][j]:
-					row = row.replace(matrix[i][j],"_"+matrix[i][j])
+		var xx = _x*2
+		for i in _y:
+			var row = ""
+			var chars = matrix[i]
+			var startPos = i*_y
+			var chromosomesRow:Array[bool] = chromosomes.slice(startPos,startPos+_x)
+			
+			for j in _x:
+				
+				if chromosomesRow[j]:
+					row += "_"
+				else:
+					row+=chars[0]
+					chars = chars.substr(1)
+			row+=chars
+			for j in xx - row.length():
+				row += "_"
 			trueMatrix.append(row)
 		return trueMatrix
 	func evaluete(matrix:Array[String]):
 		fitness=0
-		var trueMatrix = get_matrix(matrix)
-		var dicPos:Dictionary={}
-		for i in trueMatrix:
-			for j in i.length():
-				var theChar:String = i[j]
-				if theChar =="_":continue
-				if theChar in dicPos.keys():
-					if not j in dicPos[theChar]:
-						dicPos[theChar].append(j)
-				else:
-					dicPos[theChar] = [j]
-		for i in dicPos:
-			fitness+=_x-dicPos[i].size()+1
-	func mutate():
-		pass
-
+		var trueMatrix:Array[String] = get_matrix(matrix)
+		print(trueMatrix)
+		for i in _x*2:
+			var chars:Dictionary ={}
+			for j in _y:
+				var theChar:String = trueMatrix[j][i]
+				if theChar == "_":
+					continue
+				if theChar in chars.keys():
+					chars[theChar] += 1
+					continue
+				chars[theChar] =1
+			if chars.size()==1:
+				fitness+=chars[chars.keys()[0]]
+				#fitness+=1
