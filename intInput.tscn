@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://db5r2o786jesd"]
+
+[ext_resource type="Script" path="res://intInput.gd" id="1_bnd5u"]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+script = ExtResource("1_bnd5u")
+nameing = "Generations"
+maxVal = 1000
+minVal = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "WWWWWW"
+
+[node name="More" type="Button" parent="."]
+layout_mode = 2
+text = "+"
+
+[node name="Less" type="Button" parent="."]
+layout_mode = 2
+text = "-"
+
+[connection signal="pressed" from="More" to="." method="_on_value_pressed" binds= [1]]
+[connection signal="pressed" from="Less" to="." method="_on_value_pressed" binds= [-1]]
