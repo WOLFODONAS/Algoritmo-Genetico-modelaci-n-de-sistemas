@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cp5rjokykao8w"]
+[gd_scene load_steps=4 format=3 uid="uid://cp5rjokykao8w"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_85n21"]
 [ext_resource type="PackedScene" uid="uid://db5r2o786jesd" path="res://intInput.tscn" id="1_sl6i5"]
+[ext_resource type="Script" path="res://drawMatrix.gd" id="3_1itku"]
 
 [node name="Control" type="Control" node_paths=PackedStringArray("matrixLabel", "outputLable")]
 layout_mode = 3
@@ -53,12 +54,16 @@ step = 10
 layout_mode = 2
 nameing = "X size"
 maxVal = 24
-minVal = 5
+minVal = 2
 
 [node name="y" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "Y size"
-minVal = 5
+minVal = 2
+
+[node name="GaspAmount" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+layout_mode = 2
+nameing = "Gasp Amount"
 
 [node name="OptionButton" type="OptionButton" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -71,8 +76,10 @@ popup/item_1/text = "Roulette Wheel"
 popup/item_1/id = 0
 popup/item_2/text = "Rank"
 popup/item_2/id = 1
+popup/item_2/disabled = true
 popup/item_3/text = "Tournament"
 popup/item_3/id = 2
+popup/item_3/disabled = true
 
 [node name="Control" type="Control" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -127,9 +134,41 @@ grow_horizontal = 2
 grow_vertical = 2
 bbcode_enabled = true
 
+[node name="Window" type="ConfirmationDialog" parent="."]
+position = Vector2i(0, 36)
+size = Vector2i(500, 500)
+popup_window = true
+
+[node name="Control" type="Control" parent="Window"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_1itku")
+
+[node name="SquereSize" parent="Window/Control" instance=ExtResource("1_sl6i5")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -131.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+nameing = "Square Size"
+minVal = 20
+step = 5
+
+[connection signal="endProsses" from="." to="." method="_on_end_prosses"]
 [connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Generations" to="." method="_on_generations_value_changed"]
 [connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Population" to="." method="_on_population_value_changed"]
 [connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/x" to="." method="_on_x_value_changed"]
 [connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/y" to="." method="_on_y_value_changed"]
+[connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/GaspAmount" to="." method="_on_gasp_amount_value_changed"]
 [connection signal="item_selected" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button" to="." method="_on_button_pressed"]
+[connection signal="valueChanged" from="Window/Control/SquereSize" to="Window/Control" method="_on_squere_size_value_changed"]
