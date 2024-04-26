@@ -16,12 +16,12 @@
 </details>
 
 ## About The Project
-
+<img src="matrixView">
 Los algoritmos genéticos son una técnica de optimización inspirada en el proceso evolutivo natural que se encuentra en la naturaleza. Utilizando conceptos de selección natural, reproducción y mutación, los algoritmos genéticos buscan encontrar soluciones óptimas a problemas complejos en un amplio espectro de disciplinas.
 
 Este enfoque se basa en la idea de que una población de soluciones candidatas puede evolucionar y mejorar a lo largo del tiempo mediante la aplicación de operadores genéticos, como la selección de individuos más aptos, la combinación de características a través de la reproducción y la introducción de variabilidad mediante la mutación.
 
-El programa busca ordenar 
+El algoritmo 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
