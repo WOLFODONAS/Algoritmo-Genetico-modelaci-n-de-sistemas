@@ -4,16 +4,13 @@
     <li><a href="#Sobre-el-proyecto">Sobre el proyecto</a></li>
     <li><a href="#Evaluación">Evaulación</a></li>
     <li><a href="#Cómo-funciona">Cómo funciona</a></li>
-    <li><a href="#Técnicas-de-recombinación">Técnicas de recombinación</a></li>
+    <li><a href="#Técnica-de-recombinación">Técnicas de recombinación</a></li>
     <li>
       <a href="#Algoritmos-de-selección">Algoritmos de selección</a>
       <ul>
         <li><a href="#selección-de-ruleta">Selección de ruleta</a></li>
       </ul>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -25,7 +22,7 @@ Este enfoque se basa en la idea de que una población de soluciones candidatas p
 
 El algoritmo busca agregar espacios en la matriz de caracteres para encontrar coincidencias entre las columnas y separarlas como se vé en la imagen. 
 
-
+<img src="matrixView.png">
 
 Para lograr esto, el programa resive 6 parametros.
 
@@ -46,7 +43,6 @@ Para lograr esto, el programa resive 6 parametros.
 Por cada generación, se obtiene una población de individuos, los cuáles tienen cromosomas (representado con un arreglo de números enteros). A cada cromosoma se le asigna un caracter, y su valor representa la cantidad de espacios que se le va a agregar a dicho caracter. 
 
 Los individuos se evalúan y se ordenan de mayor a menor para hacer el proceso de selección y crear una nueva generación, repitiendo este proceso recursivamente hasta llegar a la cantidad de generaciones deseadas.
-<img src="matrixView.png">
 
 ## Evaulación
 
@@ -66,17 +62,22 @@ Para evaluar correctamente esto, cada individuo define una matriz según sus cro
 
 2.- En caso de que la columna solo tenga un solo tipo de caracter, la puntuación sube la cantidad de veces que se repite el caracter elevada al cuadrado.
 
-## Técnicas de recombinación
+## Técnica de recombinación
 
-La técnica en la que los individuos se van a reproducir es la de convinación en un punto, la cuál consiste en dividir los cromosomas en un punto del arreglo al azar para generar a dos hijos candidatos, ambos se mutan y se evalúan para elegir al hijo con mayor valor.
+La técnica en la que los individuos se van a reproducir, es la de convinación en un punto, la cuál consiste en dividir los cromosomas en un punto del arreglo al azar para generar a dos hijos candidatos, ambos se mutan y se evalúan para elegir al hijo con mayor valor.
 
-<img src="matrixView.png">
+<img src="CrossoverOnePoint.png">
 
 
 ## Algoritmos de selección
 
 La selección en algoritmos genéticos es el proceso de elegir a los individuos más aptos de una población para reproducirse y generar descendencia. Se basa en principios de selección natural, donde los individuos con mejores características tienen más probabilidades de ser seleccionados.
 
+## Selección de ruleta
+
+La selección de ruleta consiste en asignarle una probabilidad a cada individuo según su desempleño al completar la tarea, después se eligen dos individuos al azar para empezar el proceso de recombinación.
+
+(proximos algoritmos por añadir)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
