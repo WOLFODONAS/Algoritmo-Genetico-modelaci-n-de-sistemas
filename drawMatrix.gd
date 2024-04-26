@@ -23,11 +23,9 @@ func _draw() -> void:
 			draw_rect(Rect2(startPoint,endPoint),Color.RED,false,4)
 			draw_char(get_theme_default_font(),startPoint+ (endPoint/2),startMatrix[i][j],ltSize)
 	var endStartM:int = startMatrix.size()+1
-	print(endStartM)
 	for i in endMatrix.size():
 		for j in endMatrix[i].length():
 			var startPoint = (Vector2(j,i+endStartM)*sqS) 
-			print(startPoint)
 			var endPoint = Vector2.ONE*sqS
 			var ltSize = int(float(sqS/2.0))
 			draw_rect(Rect2(startPoint,endPoint),Color.LAWN_GREEN,false,4)

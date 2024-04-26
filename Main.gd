@@ -36,6 +36,7 @@ func _on_button_pressed() -> void:
 		matrixLabel.text+=i+"\n"
 	var population:Array[Individual]=[]
 	outputLable.clear()
+	outputLable.append_text("[color=gray]Start process[/color]\n")
 	population.resize(p)
 	for i in p:
 		population[i] = Individual.new(x,y,_get_random_choromosomes(x*y))
@@ -51,15 +52,11 @@ func _live(generation:int,population:Array[Individual]):
 		betterMatrix = population[0].get_matrix(matrix)
 	var  worstFitness:int = population[p-1].fitness
 	outputLable.append_text("Generation: [color=blue]%s[/color]\n"%generation)
-	outputLable.append_text("Best Fitness: [color=%s]%s[/color]\n"%["red"if bestFitness>float(x*y)/2 
-	else "yellow" if bestFitness != 0 else "green",bestFitness])
-	outputLable.append_text("Worst Fitness: [color=%s]%s[/color]\n"%["red"if worstFitness>float(x*y)/2 
-	else "yellow" if worstFitness != 0 else "green",worstFitness])
+	outputLable.append_text("Best Fitness: [color=green]%s[/color]\n"%bestFitness)
+	outputLable.append_text("Worst Fitness: [color=red]%s[/color]\n"%worstFitness)
 	if  generation>=g:
 		emit_signal("endProsses")
-		outputLable.append_text(str(population[0].chromosomes)+"\n")
-		for i in population[0].get_matrix(matrix):
-			outputLable.append_text(str(i)+"\n")
+		outputLable.append_text("[color=gray]End process[/color]")
 		return
 	var newPopulation:Array[Individual]=[]
 	newPopulation.resize(p)
