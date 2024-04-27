@@ -17,7 +17,7 @@ signal  endProsses
 func _on_button_pressed() -> void:
 	betterFitness = -1
 	betterMatrix = []
-	$VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = true
+	$TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = true
 	await  get_tree().process_frame
 	await  get_tree().process_frame
 	await  get_tree().process_frame
@@ -60,37 +60,75 @@ func _live(generation:int,population:Array[Individual]):
 		return
 	var newPopulation:Array[Individual]=[]
 	newPopulation.resize(p)
-	if sexMode ==1:
-		var fsum:int=0
-		for i in population:
-			fsum+=i.fitness
-		var Pi:Array[float]=[]
-		Pi.resize(p)
-		var pastVal:float=0.0
-		var div:float = 1.0/float(population.size())
-		for i in p:
-			var fit = float(population[i].fitness)
-			if fit == 0:
-				Pi[i] = div + pastVal
-			else:
-				Pi[i] = float(population[i].fitness)/fsum +pastVal
-			pastVal=Pi[i]
-		for i in p:
-			var fatherPi:float = randf()
-			var motherPi:float = randf()
-			var fatherIndx:int=-1
-			var motherIndx:int=-1
-			for j in p:
-				if  fatherPi<Pi[j]:
-					fatherIndx=j
-					break
-			for j in p:
-				if  motherPi<Pi[j] and j !=fatherIndx:
-					motherIndx=j
-					break
-			newPopulation[i] = _get_better_kid(population[motherIndx],
-									population[fatherIndx])
-			
+	match  sexMode:
+		1:
+			var fsum:int=0
+			for i in population:
+				fsum+=i.fitness
+			var Pi:Array[float]=[]
+			Pi.resize(p)
+			var pastVal:float=0.0
+			var div:float = 1.0/float(population.size())
+			for i in p:
+				var fit = float(population[i].fitness)
+				if fit == 0:
+					Pi[i] = div + pastVal
+				else:
+					Pi[i] = float(population[i].fitness)/fsum +pastVal
+				pastVal=Pi[i]
+			for i in p:
+				var fatherPi:float = randf()
+				var motherPi:float = randf()
+				var fatherIndx:int=-1
+				var motherIndx:int=-1
+				for j in p:
+					if  fatherPi<Pi[j]:
+						fatherIndx=j
+						break
+				for j in p:
+					if  motherPi<Pi[j] and j !=fatherIndx:
+						motherIndx=j
+						break
+				newPopulation[i] = _get_better_kid(population[motherIndx],
+										population[fatherIndx])
+				
+		2:
+			for i in p:
+				var fatherA:Individual = population.pick_random()
+				var fatherB:Individual = population.pick_random()
+				while  fatherB == fatherA:
+					fatherB = population.pick_random()
+				var motherA:Individual = population.pick_random()
+				while motherA == fatherA or motherA == fatherB:
+					motherA = population.pick_random()
+				var motherB:Individual = population.pick_random()
+				while( motherB == fatherA or motherB == fatherB
+						or motherB == fatherA):
+					motherB= population.pick_random()
+				newPopulation[i] = _get_better_kid(fatherA if fatherA.fitness > fatherB.fitness else fatherB,
+												motherA if motherA.fitness > motherB.fitness else motherB)
+		3:
+			var Pi:Array[float]=[]
+			Pi.resize(p)
+			for i in p:
+				Pi[i] = (i+1)/p
+			population.reverse()
+			for i in p:
+				var fatherPi:float = randf()
+				var motherPi:float = randf()
+				var fatherIndx:int=-1
+				var motherIndx:int=-1
+				for j in p:
+					if  fatherPi<Pi[j]:
+						fatherIndx=j
+						break
+				for j in p:
+					if  motherPi<Pi[j] and j !=fatherIndx:
+						motherIndx=j
+						break
+				newPopulation[i] = _get_better_kid(population[motherIndx],
+										population[fatherIndx])
+				
 	_live(generation+1,newPopulation)
 	
 func _get_better_kid(mother:Individual,father:Individual):
@@ -134,7 +172,7 @@ func _on_gasp_amount_value_changed(val) -> void:
 func _on_option_button_item_selected(index: int) -> void:
 	sexMode = index
 	
-	$VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = false
+	$TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = false
 func _get_random_choromosomes(sz:int) -> Array[int]:
 	var theC:Array[int]=[]
 	for i in sz:
@@ -192,4 +230,4 @@ class Individual:
 func _on_end_prosses():
 	$Window.popup()
 	$Window/Control.set_info(matrix,betterMatrix)
-	$VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = false
+	$TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = false

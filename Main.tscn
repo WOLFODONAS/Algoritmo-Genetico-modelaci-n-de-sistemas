@@ -12,10 +12,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_85n21")
-matrixLabel = NodePath("VSplitContainer/Panel2/HBoxContainer/ScrollContainer/Label")
-outputLable = NodePath("VSplitContainer/Panel/RichTextLabel")
+matrixLabel = NodePath("TabContainer/VSplitContainer/Panel2/HBoxContainer/ScrollContainer/Label")
+outputLable = NodePath("TabContainer/VSplitContainer/Panel/RichTextLabel")
 
-[node name="VSplitContainer" type="VSplitContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,11 +23,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel2" type="Panel" parent="VSplitContainer"]
+[node name="VSplitContainer" type="VSplitContainer" parent="TabContainer"]
+layout_mode = 2
+
+[node name="Panel2" type="Panel" parent="TabContainer/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VSplitContainer/Panel2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/VSplitContainer/Panel2"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,37 +38,37 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/Panel2/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Generations" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="Generations" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 minVal = 5
 step = 5
 
-[node name="Population" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="Population" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "Population"
 minVal = 10
 step = 10
 
-[node name="x" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="x" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "X size"
 maxVal = 24
 minVal = 2
 
-[node name="y" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="y" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "Y size"
 minVal = 2
 
-[node name="GaspAmount" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="GaspAmount" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "Gasp Amount"
 
-[node name="OptionButton" type="OptionButton" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 item_count = 4
 selected = 0
@@ -74,18 +77,16 @@ popup/item_0/id = 0
 popup/item_0/disabled = true
 popup/item_1/text = "Roulette Wheel"
 popup/item_1/id = 0
-popup/item_2/text = "Rank"
+popup/item_2/text = "Tournament"
 popup/item_2/id = 1
-popup/item_2/disabled = true
-popup/item_3/text = "Tournament"
+popup/item_3/text = "Rank"
 popup/item_3/id = 2
-popup/item_3/disabled = true
 
-[node name="Control" type="Control" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control"]
+[node name="Button" type="Button" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -100,20 +101,20 @@ grow_vertical = 0
 disabled = true
 text = "Go"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VSplitContainer/Panel2/HBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VSplitContainer/Panel2/HBoxContainer/ScrollContainer"]
+[node name="Label" type="Label" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel" type="Panel" parent="VSplitContainer"]
+[node name="Panel" type="Panel" parent="TabContainer/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="VSplitContainer/Panel"]
+[node name="Label" type="Label" parent="TabContainer/VSplitContainer/Panel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -124,7 +125,7 @@ offset_bottom = 23.0
 grow_horizontal = 2
 text = "Output"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VSplitContainer/Panel"]
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/VSplitContainer/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -164,11 +165,11 @@ minVal = 20
 step = 5
 
 [connection signal="endProsses" from="." to="." method="_on_end_prosses"]
-[connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Generations" to="." method="_on_generations_value_changed"]
-[connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Population" to="." method="_on_population_value_changed"]
-[connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/x" to="." method="_on_x_value_changed"]
-[connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/y" to="." method="_on_y_value_changed"]
-[connection signal="valueChanged" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/GaspAmount" to="." method="_on_gasp_amount_value_changed"]
-[connection signal="item_selected" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
-[connection signal="pressed" from="VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button" to="." method="_on_button_pressed"]
+[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Generations" to="." method="_on_generations_value_changed"]
+[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Population" to="." method="_on_population_value_changed"]
+[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/x" to="." method="_on_x_value_changed"]
+[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/y" to="." method="_on_y_value_changed"]
+[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/GaspAmount" to="." method="_on_gasp_amount_value_changed"]
+[connection signal="item_selected" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button" to="." method="_on_button_pressed"]
 [connection signal="valueChanged" from="Window/Control/SquereSize" to="Window/Control" method="_on_squere_size_value_changed"]
