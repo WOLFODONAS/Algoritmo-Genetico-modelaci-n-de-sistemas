@@ -5,19 +5,27 @@ var y:int #Matriz y size
 var p:int #Population
 var g:int #Generation
 var ga:int #Gasp Amount
+var eliteP:float #Elite percentage
 var betterMatrix:Array[String]
+var topIndv:Array[int]
+var worstIndv:Array[int]
 var betterFitness:int = -1
+var betterIndx:int=-1
 const  chars = "abcdefghijklmnopqrstuvwxyz"
 var sexMode:int
 signal  endProsses
 @export var matrixLabel:Label
-@export var outputLable:RichTextLabel
+@export var outputLabel:RichTextLabel
+@export var resultLabel:RichTextLabel
 
 
 func _on_button_pressed() -> void:
 	betterFitness = -1
-	betterMatrix = []
-	$TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = true
+	betterIndx = -1
+	betterMatrix.clear()
+	topIndv.clear()
+	worstIndv.clear()
+	$Div/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = true
 	await  get_tree().process_frame
 	await  get_tree().process_frame
 	await  get_tree().process_frame
@@ -35,8 +43,9 @@ func _on_button_pressed() -> void:
 	for i in matrix:
 		matrixLabel.text+=i+"\n"
 	var population:Array[Individual]=[]
-	outputLable.clear()
-	outputLable.append_text("[color=gray]Start process[/color]\n")
+	outputLabel.clear()
+	resultLabel.clear()
+	outputLabel.append_text("[color=gray]Start process[/color]\n")
 	population.resize(p)
 	for i in p:
 		population[i] = Individual.new(x,y,_get_random_choromosomes(x*y))
@@ -46,20 +55,31 @@ func _on_button_pressed() -> void:
 func _live(generation:int,population:Array[Individual]):
 	
 	population.sort_custom(sort_by_fitness)
+	
+	worstIndv.append(population[p-1].fitness)
 	var  bestFitness:int= population[0].fitness
+	topIndv.append(bestFitness)
+	
+	#print(bestFitness, "   ", betterFitness, bestFitness>betterFitness)
 	if bestFitness>betterFitness:
+		
 		betterFitness = bestFitness
 		betterMatrix = population[0].get_matrix(matrix)
+		betterIndx = generation
 	var  worstFitness:int = population[p-1].fitness
-	outputLable.append_text("Generation: [color=blue]%s[/color]\n"%generation)
-	outputLable.append_text("Best Fitness: [color=green]%s[/color]\n"%bestFitness)
-	outputLable.append_text("Worst Fitness: [color=red]%s[/color]\n"%worstFitness)
+	outputLabel.append_text("Generation: [color=cyan]%s[/color]\n"%generation)
+	outputLabel.append_text("Best Fitness: [color=green]%s[/color]\n"%bestFitness)
+	outputLabel.append_text("Worst Fitness: [color=red]%s[/color]\n"%worstFitness)
 	if  generation>=g:
 		emit_signal("endProsses")
-		outputLable.append_text("[color=gray]End process[/color]")
+		outputLabel.append_text("[color=gray]End process[/color]")
+		resultLabel.append_text("Generations: [color=cyan]%s[/color]\n"%g)
+		resultLabel.append_text("Best Generation: [color=green]%s[/color]\n"%betterIndx)
+		resultLabel.append_text("Best Fitness: [color=green]%s[/color]\n"%topIndv[betterIndx-1])
+		
 		return
-	var newPopulation:Array[Individual]=[]
-	newPopulation.resize(p)
+	var elite:int = int(p*eliteP)
+	var newPopulation:Array[Individual]=population.slice(0,elite)
 	match  sexMode:
 		1:
 			var fsum:int=0
@@ -76,7 +96,7 @@ func _live(generation:int,population:Array[Individual]):
 				else:
 					Pi[i] = float(population[i].fitness)/fsum +pastVal
 				pastVal=Pi[i]
-			for i in p:
+			for i in range(elite,p):
 				var fatherPi:float = randf()
 				var motherPi:float = randf()
 				var fatherIndx:int=-1
@@ -85,15 +105,15 @@ func _live(generation:int,population:Array[Individual]):
 					if  fatherPi<Pi[j]:
 						fatherIndx=j
 						break
-				for j in p:
+				for j in int(p* eliteP):
 					if  motherPi<Pi[j] and j !=fatherIndx:
 						motherIndx=j
 						break
-				newPopulation[i] = _get_better_kid(population[motherIndx],
-										population[fatherIndx])
+				newPopulation.append( _get_better_kid(population[motherIndx],
+										population[fatherIndx]))
 				
 		2:
-			for i in p:
+			for i in range(elite,p):
 				var fatherA:Individual = population.pick_random()
 				var fatherB:Individual = population.pick_random()
 				while  fatherB == fatherA:
@@ -105,15 +125,20 @@ func _live(generation:int,population:Array[Individual]):
 				while( motherB == fatherA or motherB == fatherB
 						or motherB == fatherA):
 					motherB= population.pick_random()
-				newPopulation[i] = _get_better_kid(fatherA if fatherA.fitness > fatherB.fitness else fatherB,
-												motherA if motherA.fitness > motherB.fitness else motherB)
+				newPopulation.append( _get_better_kid(fatherA if fatherA.fitness > fatherB.fitness else fatherB,
+												motherA if motherA.fitness > motherB.fitness else motherB))
 		3:
 			var Pi:Array[float]=[]
 			Pi.resize(p)
+			var maxVal:int = 0
 			for i in p:
-				Pi[i] = (i+1)/p
+				maxVal+= i+1
+			var pastVal=0
+			for i in p:
+				Pi[i] = float(pastVal+i+1)/maxVal
+				pastVal = Pi[i]
 			population.reverse()
-			for i in p:
+			for i in range(elite,p):
 				var fatherPi:float = randf()
 				var motherPi:float = randf()
 				var fatherIndx:int=-1
@@ -126,11 +151,12 @@ func _live(generation:int,population:Array[Individual]):
 					if  motherPi<Pi[j] and j !=fatherIndx:
 						motherIndx=j
 						break
-				newPopulation[i] = _get_better_kid(population[motherIndx],
-										population[fatherIndx])
-				
-	_live(generation+1,newPopulation)
+				newPopulation.append( _get_better_kid(population[motherIndx],
+										population[fatherIndx]))
 	
+	_live(generation+1,newPopulation)
+
+
 func _get_better_kid(mother:Individual,father:Individual):
 	var matrixSize=(x*y)
 	var crossLine:int = int(randf() * matrixSize)
@@ -169,10 +195,13 @@ func _on_y_value_changed(val: int) -> void:
 func _on_gasp_amount_value_changed(val) -> void:
 	ga = val
 
+func _on_elite_percentage_value_changed(val: int) -> void:
+	eliteP = float(val)/100
+
 func _on_option_button_item_selected(index: int) -> void:
 	sexMode = index
 	
-	$TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = false
+	$Div/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = false
 func _get_random_choromosomes(sz:int) -> Array[int]:
 	var theC:Array[int]=[]
 	for i in sz:
@@ -218,16 +247,24 @@ class Individual:
 					continue
 				chars[theChar] =1
 			if chars.size()==1:
-				var amnt = chars[chars.keys()[0]]
-				if amnt >1:
-					amnt =int( pow(amnt,2))
-				fitness+=amnt
+				fitness+= pow(chars[chars.keys()[0]], 2)
+			else:
+				var minus = 0
+				for i in chars:
+					minus+= chars[i]
+				fitness-=minus
 			if !toContinue:
 				break
 			indx+=1
+		if fitness <0:
+			fitness =0
 
 
 func _on_end_prosses():
 	$Window.popup()
-	$Window/Control.set_info(matrix,betterMatrix)
-	$TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = false
+	$SubViewport/Control.set_info(matrix,betterMatrix)
+	$Div/Panel2/HBoxContainer/VBoxContainer/Control/Button.disabled = false
+	$Div/Panel/TC/Graph.set_info(topIndv,worstIndv,betterFitness)
+
+
+

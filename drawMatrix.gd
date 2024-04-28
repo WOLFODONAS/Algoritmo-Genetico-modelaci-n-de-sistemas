@@ -15,22 +15,30 @@ func set_info(_startMatrix:Array[String],_endMatrix:Array[String]) ->void:
 	queue_redraw()
 
 func _draw() -> void:
+	var maxX = 0
+	var maxY = 0
+	var ltSize = int(float(sqS/2.0))
+	var endPoint = Vector2.ONE*sqS
+	draw_string(get_theme_default_font(),Vector2(0,ltSize),"Input Matrix",HORIZONTAL_ALIGNMENT_CENTER,-1,ltSize)
 	for i in startMatrix.size():
 		for j in startMatrix[i].length():
-			var startPoint = Vector2(j,i)*sqS
-			var endPoint = Vector2.ONE*sqS
-			var ltSize = int(float(sqS/2.0))
+			var startPoint = Vector2(j,i+1)*sqS
+			
+			
 			draw_rect(Rect2(startPoint,endPoint),Color.RED,false,4)
-			draw_char(get_theme_default_font(),startPoint+ (endPoint/2),startMatrix[i][j],ltSize)
-	var endStartM:int = startMatrix.size()+1
+			draw_char(get_theme_default_font(),startPoint+ (endPoint/2)+(Vector2(-0.25,0.5)*ltSize),startMatrix[i][j],ltSize)
+	var endStartM:int = startMatrix.size()+2
+	draw_string(get_theme_default_font(),Vector2(0,endStartM)*sqS*0.95,"Output Matrix",HORIZONTAL_ALIGNMENT_FILL,-1,ltSize)
 	for i in endMatrix.size():
 		for j in endMatrix[i].length():
 			var startPoint = (Vector2(j,i+endStartM)*sqS) 
-			var endPoint = Vector2.ONE*sqS
-			var ltSize = int(float(sqS/2.0))
+			if endPoint.x+startPoint.x>maxX:
+				maxX = endPoint.x+startPoint.x
+			if endPoint.y+startPoint.y>maxY:
+				maxY = endPoint.y+startPoint.y
 			draw_rect(Rect2(startPoint,endPoint),Color.LAWN_GREEN,false,4)
-			draw_char(get_theme_default_font(),startPoint+ (endPoint/2),endMatrix[i][j],ltSize)
-
+			draw_char(get_theme_default_font(),startPoint+ (endPoint/2)+(Vector2(-0.25,0.5)*ltSize),endMatrix[i][j],ltSize)
+	get_parent().size= Vector2(maxX,maxY)
 
 
 

@@ -1,10 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://cp5rjokykao8w"]
+[gd_scene load_steps=7 format=3 uid="uid://cp5rjokykao8w"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_85n21"]
 [ext_resource type="PackedScene" uid="uid://db5r2o786jesd" path="res://intInput.tscn" id="1_sl6i5"]
 [ext_resource type="Script" path="res://drawMatrix.gd" id="3_1itku"]
+[ext_resource type="Script" path="res://Graph.gd" id="3_2msrl"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("matrixLabel", "outputLable")]
+[sub_resource type="ViewportTexture" id="ViewportTexture_1pcrc"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4ngwp"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Control" type="Control" node_paths=PackedStringArray("matrixLabel", "outputLabel", "resultLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,10 +19,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_85n21")
-matrixLabel = NodePath("TabContainer/VSplitContainer/Panel2/HBoxContainer/ScrollContainer/Label")
-outputLable = NodePath("TabContainer/VSplitContainer/Panel/RichTextLabel")
+matrixLabel = NodePath("Div/Panel2/HBoxContainer/ScrollContainer/Label")
+outputLabel = NodePath("Div/Panel/TC/Print")
+resultLabel = NodePath("Div/Panel/TC/Result/HSplitContainer/Control/Label")
 
-[node name="TabContainer" type="TabContainer" parent="."]
+[node name="Div" type="VSplitContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,14 +31,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VSplitContainer" type="VSplitContainer" parent="TabContainer"]
-layout_mode = 2
-
-[node name="Panel2" type="Panel" parent="TabContainer/VSplitContainer"]
+[node name="Panel2" type="Panel" parent="Div"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/VSplitContainer/Panel2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Div/Panel2"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,37 +43,44 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Div/Panel2/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Generations" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="Generations" parent="Div/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 minVal = 5
 step = 5
 
-[node name="Population" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="Population" parent="Div/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "Population"
 minVal = 10
 step = 10
 
-[node name="x" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="x" parent="Div/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "X size"
 maxVal = 24
 minVal = 2
 
-[node name="y" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="y" parent="Div/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "Y size"
 minVal = 2
 
-[node name="GaspAmount" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+[node name="GaspAmount" parent="Div/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
 layout_mode = 2
 nameing = "Gasp Amount"
 
-[node name="OptionButton" type="OptionButton" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer"]
+[node name="ElitePercentage" parent="Div/Panel2/HBoxContainer/VBoxContainer" instance=ExtResource("1_sl6i5")]
+layout_mode = 2
+nameing = "Elite percentage"
+maxVal = 90
+minVal = 0
+step = 10
+
+[node name="OptionButton" type="OptionButton" parent="Div/Panel2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 item_count = 4
 selected = 0
@@ -82,11 +94,11 @@ popup/item_2/id = 1
 popup/item_3/text = "Rank"
 popup/item_3/id = 2
 
-[node name="Control" type="Control" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="Div/Panel2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control"]
+[node name="Button" type="Button" parent="Div/Panel2/HBoxContainer/VBoxContainer/Control"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -101,20 +113,20 @@ grow_vertical = 0
 disabled = true
 text = "Go"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Div/Panel2/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="TabContainer/VSplitContainer/Panel2/HBoxContainer/ScrollContainer"]
+[node name="Label" type="Label" parent="Div/Panel2/HBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel" type="Panel" parent="TabContainer/VSplitContainer"]
+[node name="Panel" type="Panel" parent="Div"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="TabContainer/VSplitContainer/Panel"]
+[node name="Label" type="Label" parent="Div/Panel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -125,22 +137,112 @@ offset_bottom = 23.0
 grow_horizontal = 2
 text = "Output"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/VSplitContainer/Panel"]
+[node name="TC" type="TabContainer" parent="Div/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 30.0
 grow_horizontal = 2
 grow_vertical = 2
+current_tab = 2
+
+[node name="Print" type="RichTextLabel" parent="Div/Panel/TC"]
+visible = false
+layout_mode = 2
 bbcode_enabled = true
 
+[node name="Result" type="Control" parent="Div/Panel/TC"]
+visible = false
+layout_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="Div/Panel/TC/Result"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Div/Panel/TC/Result/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Div/Panel/TC/Result/HSplitContainer/ScrollContainer"]
+layout_mode = 2
+texture = SubResource("ViewportTexture_1pcrc")
+
+[node name="Control" type="ColorRect" parent="Div/Panel/TC/Result/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0, 0.0823529, 0, 1)
+
+[node name="Label" type="RichTextLabel" parent="Div/Panel/TC/Result/HSplitContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+focus_mode = 2
+text = "aaaaaaaaaaaaaaaaaaaaaaaa"
+selection_enabled = true
+
+[node name="SquereSize" parent="Div/Panel/TC/Result/HSplitContainer/Control/Label" instance=ExtResource("1_sl6i5")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -131.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+nameing = "Square Size"
+minVal = 20
+step = 5
+
+[node name="Graph" type="Control" parent="Div/Panel/TC"]
+layout_mode = 2
+script = ExtResource("3_2msrl")
+
 [node name="Window" type="ConfirmationDialog" parent="."]
-position = Vector2i(0, 36)
-size = Vector2i(500, 500)
+initial_position = 1
+size = Vector2i(500, 569)
 popup_window = true
 
-[node name="Control" type="Control" parent="Window"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Window"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Window/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="Window/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+texture = SubResource("ViewportTexture_4ngwp")
+stretch_mode = 2
+
+[node name="SquereSize" parent="Window/VBoxContainer" instance=ExtResource("1_sl6i5")]
+layout_mode = 2
+nameing = "Square Size"
+minVal = 20
+step = 5
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(1000, 1000)
+
+[node name="Control" type="Control" parent="SubViewport"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -149,27 +251,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_1itku")
 
-[node name="SquereSize" parent="Window/Control" instance=ExtResource("1_sl6i5")]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -131.0
-offset_top = -31.0
-grow_horizontal = 0
-grow_vertical = 0
-nameing = "Square Size"
-minVal = 20
-step = 5
-
 [connection signal="endProsses" from="." to="." method="_on_end_prosses"]
-[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Generations" to="." method="_on_generations_value_changed"]
-[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Population" to="." method="_on_population_value_changed"]
-[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/x" to="." method="_on_x_value_changed"]
-[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/y" to="." method="_on_y_value_changed"]
-[connection signal="valueChanged" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/GaspAmount" to="." method="_on_gasp_amount_value_changed"]
-[connection signal="item_selected" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
-[connection signal="pressed" from="TabContainer/VSplitContainer/Panel2/HBoxContainer/VBoxContainer/Control/Button" to="." method="_on_button_pressed"]
-[connection signal="valueChanged" from="Window/Control/SquereSize" to="Window/Control" method="_on_squere_size_value_changed"]
+[connection signal="valueChanged" from="Div/Panel2/HBoxContainer/VBoxContainer/Generations" to="." method="_on_generations_value_changed"]
+[connection signal="valueChanged" from="Div/Panel2/HBoxContainer/VBoxContainer/Population" to="." method="_on_population_value_changed"]
+[connection signal="valueChanged" from="Div/Panel2/HBoxContainer/VBoxContainer/x" to="." method="_on_x_value_changed"]
+[connection signal="valueChanged" from="Div/Panel2/HBoxContainer/VBoxContainer/y" to="." method="_on_y_value_changed"]
+[connection signal="valueChanged" from="Div/Panel2/HBoxContainer/VBoxContainer/GaspAmount" to="." method="_on_gasp_amount_value_changed"]
+[connection signal="valueChanged" from="Div/Panel2/HBoxContainer/VBoxContainer/ElitePercentage" to="." method="_on_elite_percentage_value_changed"]
+[connection signal="item_selected" from="Div/Panel2/HBoxContainer/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="Div/Panel2/HBoxContainer/VBoxContainer/Control/Button" to="." method="_on_button_pressed"]
+[connection signal="valueChanged" from="Div/Panel/TC/Result/HSplitContainer/Control/Label/SquereSize" to="SubViewport/Control" method="_on_squere_size_value_changed"]
+[connection signal="resized" from="Div/Panel/TC/Graph" to="Div/Panel/TC/Graph" method="_on_resized"]
+[connection signal="valueChanged" from="Window/VBoxContainer/SquereSize" to="SubViewport/Control" method="_on_squere_size_value_changed"]
