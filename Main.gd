@@ -13,6 +13,7 @@ var betterFitness:int = -1
 var betterIndx:int=-1
 const  chars = "abcdefghijklmnopqrstuvwxyz"
 var sexMode:int
+var startTime:float
 signal  endProsses
 @export var matrixLabel:Label
 @export var outputLabel:RichTextLabel
@@ -39,7 +40,7 @@ func _on_button_pressed() -> void:
 			newString+=theChar
 			pchars = pchars.replace(theChar,"")
 		matrix[i] = newString
-	matrixLabel.text = "Matrix\n"
+	matrixLabel.text = "Matrix:\n\n"
 	for i in matrix:
 		matrixLabel.text+=i+"\n"
 	var population:Array[Individual]=[]
@@ -50,6 +51,7 @@ func _on_button_pressed() -> void:
 	for i in p:
 		population[i] = Individual.new(x,y,_get_random_choromosomes(x*y))
 		population[i].evaluete(matrix)
+	startTime = Time.get_ticks_msec()
 	_live(1,population)
 
 func _live(generation:int,population:Array[Individual]):
@@ -60,7 +62,6 @@ func _live(generation:int,population:Array[Individual]):
 	var  bestFitness:int= population[0].fitness
 	topIndv.append(bestFitness)
 	
-	#print(bestFitness, "   ", betterFitness, bestFitness>betterFitness)
 	if bestFitness>betterFitness:
 		
 		betterFitness = bestFitness
@@ -76,7 +77,7 @@ func _live(generation:int,population:Array[Individual]):
 		resultLabel.append_text("Generations: [color=cyan]%s[/color]\n"%g)
 		resultLabel.append_text("Best Generation: [color=green]%s[/color]\n"%betterIndx)
 		resultLabel.append_text("Best Fitness: [color=green]%s[/color]\n"%topIndv[betterIndx-1])
-		
+		resultLabel.append_text("Time: [color=gray]%s[/color] Seconds\n"%((float(Time.get_ticks_msec())-startTime)/1000))
 		return
 	var elite:int = int(p*eliteP)
 	var newPopulation:Array[Individual]=population.slice(0,elite)
@@ -164,10 +165,11 @@ func _get_better_kid(mother:Individual,father:Individual):
 						+ father.chromosomes.slice(crossLine,matrixSize))
 	var cB:Array[int]=(father.chromosomes.slice(0,crossLine) 
 						+ mother.chromosomes.slice(crossLine,matrixSize))
-	var randomGenA = int(randf() * matrixSize)
-	var randomGenB = int(randf() * matrixSize)
-	cA[randomGenA] = int(randf() * ga)
-	cB[randomGenB] = int(randf() * ga)
+	for i in int(matrixSize * 0.05) +1:
+		var randomGenA = randi_range(0,matrixSize-1)
+		var randomGenB = randi_range(0,matrixSize-1)
+		cA[randomGenA] = randi_range(0,ga)
+		cB[randomGenB] = randi_range(0,ga)
 	var son:Individual = Individual.new(x,y,cA)
 	var daughter:Individual = Individual.new(x,y,cB)
 	son.evaluete(matrix)
@@ -247,7 +249,7 @@ class Individual:
 					continue
 				chars[theChar] =1
 			if chars.size()==1:
-				fitness+= pow(chars[chars.keys()[0]], 2)
+				fitness+= int(pow(chars[chars.keys()[0]], 2))
 			else:
 				var minus = 0
 				for i in chars:

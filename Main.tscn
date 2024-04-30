@@ -149,7 +149,9 @@ current_tab = 2
 [node name="Print" type="RichTextLabel" parent="Div/Panel/TC"]
 visible = false
 layout_mode = 2
+focus_mode = 2
 bbcode_enabled = true
+selection_enabled = true
 
 [node name="Result" type="Control" parent="Div/Panel/TC"]
 visible = false
