@@ -1,21 +1,23 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#1.--sobre-el-proyecto">Sobre el proyecto</a>
+    <li><a href="#1--sobre-el-proyecto">Sobre el proyecto</a>
     <ul>
-        <li><a href="#Generaciones">Generaciones</a></li>
-        <li><a href="#Poblacíón">Poblacíón</a></li>
-        <li><a href="#Matriz">Matriz</a></li>
-        <li><a href="#Espacios">Espacios</a></li>
-        <li><a href="#Población-elite">Población elite</a></li>
+        <li><a href="#generaciones">Generaciones</a></li>
+        <li><a href="#poblacíón">Poblacíón</a></li>
+        <li><a href="#matriz">Matriz</a></li>
+        <li><a href="#espacios">Espacios</a></li>
+        <li><a href="#población-elite">Población elite</a></li>
       </ul></li>
     <li><a href="#2--cómo-funciona">Cómo funciona</a></li>
-    <li><a href="#3.-Evaluación">Evaulación</a></li>
-    <li><a href="#4.-Técnicas-de-recombinación">Técnicas de recombinación</a></li>
+    <li><a href="#3--Evaluación">Evaulación</a></li>
+    <li><a href="#4--Técnicas-de-recombinación">Técnicas de recombinación</a></li>
     <li>
-      <a href="#5.-Algoritmos-de-selección">Algoritmos de selección</a>
+      <a href="#5--Algoritmos-de-selección">Algoritmos de selección</a>
       <ul>
         <li><a href="#selección-de-ruleta">Selección de ruleta</a></li>
+        <li><a href="#selección-por-torneo">Selección por torneo</a></li>
+        <li><a href="#selección-por-ranking">Selección por ranking</a></li>
       </ul>
     </li>
   </ol>
@@ -33,17 +35,25 @@ El algoritmo busca agregar espacios en la matriz de caracteres para encontrar co
 
 Para lograr esto, el programa resive 6 parametros.
 
-1.- La matriz con la que se va a trabajar (la cual es generada aleatoriamente).
+## Generaciones
 
-2.- La población inicial.
+Las generaciones son la cantidad de veces que se creará una nueva población para resolver el problema.
 
-3.- La cantidad de generaciones.
+## Poblacíón
 
-4.- La longitud de la matriz.
+La población determina la cantidad de individuos que tendrá cada generación.
 
-5.- La altura de la matriz.
+## Matriz
 
-6.- La cantidad de espacios que puede tener cada caracter
+La matriz es generada aleatoriamente según los parametros "x" y "y".
+
+## Espacios
+
+Los espacios sirven para encontrar coincidencias entre las columnas y separarlas.
+
+## Población elite
+
+La problación elite selecciona a los mejores individuos de cada generación según el porcentaje dado por el usuario, estos individuos pasarán a la siguiente generación sin ningún cambio.
 
 ## 2.- Cómo funciona
 
@@ -69,22 +79,28 @@ Para evaluar correctamente esto, cada individuo define una matriz según sus cro
 
 2.- En caso de que la columna solo tenga un solo tipo de caracter, la puntuación sube la cantidad de veces que se repite el caracter elevada al cuadrado.
 
-## Técnica de recombinación
+## 4.-Técnica de recombinación
 
 La técnica en la que los individuos se van a reproducir, es la de convinación en un punto, la cuál consiste en dividir los cromosomas en un punto del arreglo al azar para generar a dos hijos candidatos, ambos se mutan y se evalúan para elegir al hijo con mayor valor.
 
 <img src="CrossoverOnePoint.png">
 
 
-## Algoritmos de selección
+## 5.-Algoritmos de selección
 
 La selección en algoritmos genéticos es el proceso de elegir a los individuos más aptos de una población para reproducirse y generar descendencia. Se basa en principios de selección natural, donde los individuos con mejores características tienen más probabilidades de ser seleccionados.
 
 ## Selección de ruleta
 
-La selección de ruleta consiste en asignarle una probabilidad a cada individuo según su desempleño al completar la tarea, después se eligen dos individuos al azar para empezar el proceso de recombinación.
+La selección de ruleta consiste en asignarle una probabilidad a cada individuo según su desempleño al completar la tarea.
 
-(proximos algoritmos por añadir)
+## Selección por torneo
+
+La selección por torneo consiste en poner a competir los individuos y seleccionar a los ganadores.
+
+## Selección por ranking
+
+La selección de ruleta consiste en ordenar a la población según su desempeño de asignarle una probabilidad a cada individuo según su posición.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
