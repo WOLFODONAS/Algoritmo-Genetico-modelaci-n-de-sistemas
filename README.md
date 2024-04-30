@@ -9,7 +9,7 @@
         <li><a href="#Espacios">Espacios</a></li>
         <li><a href="#Población-elite">Población elite</a></li>
       </ul></li>
-    <li><a href="#2.--cómo-funciona">Cómo funciona</a></li>
+    <li><a href="#2--cómo-funciona">Cómo funciona</a></li>
     <li><a href="#3.-Evaluación">Evaulación</a></li>
     <li><a href="#4.-Técnicas-de-recombinación">Técnicas de recombinación</a></li>
     <li>
