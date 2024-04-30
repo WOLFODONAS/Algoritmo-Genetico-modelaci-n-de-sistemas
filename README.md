@@ -1,12 +1,19 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#Sobre-el-proyecto">Sobre el proyecto</a></li>
-    <li><a href="#Evaluación">Evaulación</a></li>
-    <li><a href="#Cómo-funciona">Cómo funciona</a></li>
-    <li><a href="#Técnica-de-recombinación">Técnicas de recombinación</a></li>
+    <li><a href="#1.-Sobre-el-proyecto">Sobre el proyecto</a>
+    <ul>
+        <li><a href="#Generaciones">Generaciones</a></li>
+        <li><a href="#Poblacíón">Poblacíón</a></li>
+        <li><a href="#Matriz">Matriz</a></li>
+        <li><a href="#Espacios">Espacios</a></li>
+        <li><a href="#Población-elite">Población elite</a></li>
+      </ul></li>
+    <li><a href="#2.-Cómo-funciona">Cómo funciona</a></li>
+    <li><a href="#3.-Evaluación">Evaulación</a></li>
+    <li><a href="#4.-Técnicas-de-recombinación">Técnicas de recombinación</a></li>
     <li>
-      <a href="#Algoritmos-de-selección">Algoritmos de selección</a>
+      <a href="#5.-Algoritmos-de-selección">Algoritmos de selección</a>
       <ul>
         <li><a href="#selección-de-ruleta">Selección de ruleta</a></li>
       </ul>
@@ -14,7 +21,7 @@
   </ol>
 </details>
 
-## Sobre el proyecto
+## 1.- Sobre el proyecto
 
 Los algoritmos genéticos son una técnica de optimización inspirada en el proceso evolutivo natural que se encuentra en la naturaleza. Utilizando conceptos de selección natural, reproducción y mutación, los algoritmos genéticos buscan encontrar soluciones óptimas a problemas complejos en un amplio espectro de disciplinas.
 
@@ -38,13 +45,13 @@ Para lograr esto, el programa resive 6 parametros.
 
 6.- La cantidad de espacios que puede tener cada caracter
 
-## Cómo funciona
+## 2.- Cómo funciona
 
 Por cada generación, se obtiene una población de individuos, los cuáles tienen cromosomas (representado con un arreglo de números enteros). A cada cromosoma se le asigna un caracter, y su valor representa la cantidad de espacios que se le va a agregar a dicho caracter. 
 
 Los individuos se evalúan y se ordenan de mayor a menor para hacer el proceso de selección y crear una nueva generación, repitiendo este proceso recursivamente hasta llegar a la cantidad de generaciones deseadas.
 
-## Evaulación
+## 3.-Evaulación
 
 La amplitud en los algoritmos genéticos es una medida que evalúa qué tan adecuada es una solución candidata para resolver el problema en cuestión. En términos simples, representa qué tan bien se desempeña una solución específica en relación con los criterios de optimización definidos.
 
