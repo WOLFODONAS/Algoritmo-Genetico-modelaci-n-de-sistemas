@@ -7,7 +7,7 @@
         <li><a href="#poblacíón">Poblacíón</a></li>
         <li><a href="#matriz">Matriz</a></li>
         <li><a href="#espacios">Espacios</a></li>
-        <li><a href="#población-elite">Población elite</a></li>
+        <li><a href="#población-elite">Población élite</a></li>
       </ul></li>
     <li><a href="#2--cómo-funciona">Cómo funciona</a></li>
     <li><a href="#3--Evaluación">Evaulación</a></li>
@@ -51,7 +51,7 @@ La matriz es generada aleatoriamente según los parametros "x" y "y".
 
 Los espacios sirven para encontrar coincidencias entre las columnas y separarlas.
 
-## Población elite
+## Población élite
 
 La problación elite selecciona a los mejores individuos de cada generación según el porcentaje dado por el usuario, estos individuos pasarán a la siguiente generación sin ningún cambio.
 
